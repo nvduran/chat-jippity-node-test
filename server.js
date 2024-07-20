@@ -19,16 +19,15 @@ const openai = new openai_1.default({
 });
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const completion = yield openai.chat.completions.create({
-                messages: [{ role: "system", content: "You are a helpful assistant." }],
-                model: "gpt-4o-mini",
-            });
-            console.log(completion.choices[0]);
-        }
-        catch (error) {
-            console.error("Error creating completion:", error);
-        }
+        // conversation example
+        const completion = yield openai.chat.completions.create({
+            messages: [{ "role": "system", "content": "You are a helpful assistant." },
+                { "role": "user", "content": "Who won the world series in 2020?" },
+                { "role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020." },
+                { "role": "user", "content": "Where was it played?" }],
+            model: "gpt-4o-mini",
+        });
+        console.log(completion.choices[0]);
     });
 }
 main();
