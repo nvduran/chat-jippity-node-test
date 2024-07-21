@@ -18,14 +18,24 @@ require("dotenv").config();
 const openai = new openai_1.default({
     apiKey: process.env.OPENAI_API_KEY,
 });
-function main() {
+function mp3ToTranscript() {
     return __awaiter(this, void 0, void 0, function* () {
-        const transcription = yield openai.audio.transcriptions.create({
+        const transcript = yield openai.audio.transcriptions.create({
             file: fs_1.default.createReadStream("./sample-phone-call.mp3"),
             model: "whisper-1",
             response_format: "text",
         });
-        console.log(transcription);
+        return transcript;
     });
 }
-main();
+function analyzeCallStart() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const transcript = yield mp3ToTranscript();
+        const transcriptString = JSON.stringify(transcript);
+        // callStart is the first 30 words of the transcript
+        const callStart = transcriptString.split(" ").slice(0, 30).join(" ");
+        console.log(callStart);
+        return callStart;
+    });
+}
+analyzeCallStart();
