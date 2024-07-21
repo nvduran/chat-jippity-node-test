@@ -4,7 +4,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
-import routes from "./routes.js"; // Import the routes
+import Callsroutes from "./routes/callAnlyz.js"; // Import the routes
 
 dotenv.config();
 
@@ -21,7 +21,7 @@ const openai = new OpenAI({
 });
 
 // Use the imported routes
-app.use("/", routes);
+app.use("/calls", Callsroutes);
 
 async function main() {
   // Conversation example

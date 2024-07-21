@@ -12,7 +12,7 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import routes from "./routes.js"; // Import the routes
+import Callsroutes from "./routes/callAnlyz.js"; // Import the routes
 dotenv.config();
 const app = express();
 // CORS error fix
@@ -23,7 +23,7 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 // Use the imported routes
-app.use("/", routes);
+app.use("/calls", Callsroutes);
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         // Conversation example
