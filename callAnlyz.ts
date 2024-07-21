@@ -16,13 +16,24 @@ async function mp3ToTranscript() {
     return transcript;
   }
 
-async function analyzeCallStart() {
+async function analyzeCallStart(searchPhrase: string) {
+    let returnObj = {
+        phraseFound: false
+    };
     const transcript = await mp3ToTranscript();
     const transcriptString = JSON.stringify(transcript);
     // callStart is the first 30 words of the transcript
     const callStart = transcriptString.split(" ").slice(0, 30).join(" ");
     console.log(callStart);
-    return callStart;
+    // searchPhrase is the phrase we are looking for in the callStart
+    if (callStart.includes(searchPhrase)) {
+        console.log("The call start contains the phrase: " + searchPhrase);
+        returnObj.phraseFound = true;
+    } else {
+        console.log("The call start does not have the phrase: " + searchPhrase);
+    }
+    console.log(returnObj);
+    return returnObj;
 }
 
-analyzeCallStart();
+analyzeCallStart("Thank you for calling");
