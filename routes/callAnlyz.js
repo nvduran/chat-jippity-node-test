@@ -27,25 +27,59 @@ function mp3ToTranscript() {
         return transcript;
     });
 }
+function getSentiment(text) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        const completion = yield openai.chat.completions.create({
+            messages: [
+                { role: "system", content: "You are analyzing a phone call transcript in order to analyze the customer's sentiment, from horrible to great." },
+                { role: "assistant", content: `The phone call transcript is as follows: ${text}` },
+                { role: "user", content: "What is the customer sentiment?" },
+            ],
+            model: "gpt-4o-mini",
+        });
+        // Ensure content is a string or provide a default value
+        const sentiment = (_a = completion.choices[0].message.content) !== null && _a !== void 0 ? _a : "Sentiment not found";
+        console.log(sentiment);
+        return sentiment;
+    });
+}
 // Function to analyze the start of the call for a specific phrase
-function analyzeCallStart(searchPhrase) {
+function analyzeCall(searchPhrase) {
     return __awaiter(this, void 0, void 0, function* () {
         let returnObj = {
-            phraseFound: false,
+            startPhraseFound: false,
+            endPhraseFound: false,
+            custSentiment: "",
+            custSentimentScore: 0,
         };
         const transcript = yield mp3ToTranscript();
-        const transcriptString = JSON.stringify(transcript); // Assuming transcript is already a string
+        const transcriptString = (transcript !== null && transcript !== void 0 ? transcript : "").toString(); // Ensure transcript is a string
         // Extract the first 30 words of the transcript
         const callStart = transcriptString.split(" ").slice(0, 30).join(" ");
+        // Extract the last 30 words of the transcript
+        const callEnd = transcriptString.split(" ").slice(-30).join(" ");
         console.log(callStart);
+        console.log(callEnd);
         // Check if the search phrase is in the call start
         if (callStart.includes(searchPhrase)) {
             console.log("The call start contains the phrase: " + searchPhrase);
-            returnObj.phraseFound = true;
+            returnObj.startPhraseFound = true;
         }
         else {
             console.log("The call start does not have the phrase: " + searchPhrase);
         }
+        // Check if the search phrase is in the call end
+        if (callEnd.includes(searchPhrase)) {
+            console.log("The call end contains the phrase: " + searchPhrase);
+            returnObj.endPhraseFound = true;
+        }
+        else {
+            console.log("The call end does not have the phrase: " + searchPhrase);
+        }
+        // Get the sentiment of the customer and add it to the return object
+        let sentiment = yield getSentiment(transcriptString);
+        returnObj.custSentiment = sentiment;
         console.log(returnObj);
         return returnObj;
     });
@@ -54,7 +88,7 @@ router.get("/", (req, res) => {
     res.send("This is home page!");
 });
 router.get("/analyze", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield analyzeCallStart("Thank you for calling");
+    const result = yield analyzeCall("Thank you for calling");
     res.json(result);
 }));
 export default router;
