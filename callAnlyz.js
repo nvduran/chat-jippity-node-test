@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,20 +7,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const openai_1 = __importDefault(require("openai"));
-const fs_1 = __importDefault(require("fs"));
+import OpenAI from "openai";
+import fs from "fs";
 require("dotenv").config();
-const openai = new openai_1.default({
+const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 function mp3ToTranscript() {
     return __awaiter(this, void 0, void 0, function* () {
         const transcript = yield openai.audio.transcriptions.create({
-            file: fs_1.default.createReadStream("./sample-phone-call.mp3"),
+            file: fs.createReadStream("./sample-phone-call.mp3"),
             model: "whisper-1",
             response_format: "text",
         });

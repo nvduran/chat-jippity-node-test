@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,30 +14,31 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const openai_1 = __importDefault(require("openai"));
+import OpenAI from "openai";
 require("dotenv").config();
-const openai = new openai_1.default({
+const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 function main() {
+    var _a, e_1, _b, _c;
+    var _d, _e;
     return __awaiter(this, void 0, void 0, function* () {
-        var _a, e_1, _b, _c;
-        var _d, _e;
         const stream = yield openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: [{ role: "user", content: "Say this is a test" }],
             stream: true,
         });
         try {
-            for (var _f = true, stream_1 = __asyncValues(stream), stream_1_1; stream_1_1 = yield stream_1.next(), _a = stream_1_1.done, !_a; _f = true) {
+            for (var _f = true, stream_1 = __asyncValues(stream), stream_1_1; stream_1_1 = yield stream_1.next(), _a = stream_1_1.done, !_a;) {
                 _c = stream_1_1.value;
                 _f = false;
-                const chunk = _c;
-                process.stdout.write(((_e = (_d = chunk.choices[0]) === null || _d === void 0 ? void 0 : _d.delta) === null || _e === void 0 ? void 0 : _e.content) || "");
+                try {
+                    const chunk = _c;
+                    process.stdout.write(((_e = (_d = chunk.choices[0]) === null || _d === void 0 ? void 0 : _d.delta) === null || _e === void 0 ? void 0 : _e.content) || "");
+                }
+                finally {
+                    _f = true;
+                }
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
