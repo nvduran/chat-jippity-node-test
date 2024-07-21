@@ -4,6 +4,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
+import routes from "./routes.js"; // Import the routes
 
 dotenv.config();
 
@@ -12,25 +13,24 @@ const app = express();
 // CORS error fix
 app.use(cors());
 
-// middleware to parse res.body
+// Middleware to parse request body
 app.use(bodyParser.json());
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-app.get("/", (req: any, res: any) => {
-  res.send("This is home page!");
-});
+// Use the imported routes
+app.use("/", routes);
 
 async function main() {
-  // conversation example
+  // Conversation example
   const completion = await openai.chat.completions.create({
     messages: [
       { role: "system", content: "You are a helpful assistant." },
       { role: "user", content: "Who won the world series in 2020?" },
       { role: "assistant", content: "The Los Angeles Dodgers won the World Series in 2020." },
-      { role: "user", content: "Where was it played?" }
+      { role: "user", content: "Where was it played?" },
     ],
     model: "gpt-4o-mini",
   });

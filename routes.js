@@ -7,12 +7,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { Router } from "express";
 import OpenAI from "openai";
 import fs from "fs";
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
+const router = Router();
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
+// Function to transcribe the MP3 file to text using OpenAI's Whisper model
 function mp3ToTranscript() {
     return __awaiter(this, void 0, void 0, function* () {
         const transcript = yield openai.audio.transcriptions.create({
@@ -23,17 +27,18 @@ function mp3ToTranscript() {
         return transcript;
     });
 }
+// Function to analyze the start of the call for a specific phrase
 function analyzeCallStart(searchPhrase) {
     return __awaiter(this, void 0, void 0, function* () {
         let returnObj = {
-            phraseFound: false
+            phraseFound: false,
         };
         const transcript = yield mp3ToTranscript();
-        const transcriptString = JSON.stringify(transcript);
-        // callStart is the first 30 words of the transcript
+        const transcriptString = JSON.stringify(transcript); // Assuming transcript is already a string
+        // Extract the first 30 words of the transcript
         const callStart = transcriptString.split(" ").slice(0, 30).join(" ");
         console.log(callStart);
-        // searchPhrase is the phrase we are looking for in the callStart
+        // Check if the search phrase is in the call start
         if (callStart.includes(searchPhrase)) {
             console.log("The call start contains the phrase: " + searchPhrase);
             returnObj.phraseFound = true;
@@ -45,4 +50,11 @@ function analyzeCallStart(searchPhrase) {
         return returnObj;
     });
 }
-analyzeCallStart("Thank you for calling");
+router.get("/", (req, res) => {
+    res.send("This is home page!");
+});
+router.get("/analyze", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield analyzeCallStart("Thank you for calling");
+    res.json(result);
+}));
+export default router;
