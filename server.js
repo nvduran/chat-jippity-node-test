@@ -26,7 +26,7 @@ const openai = new OpenAI({
 app.use("/calls", Callsroutes);
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        // Conversation example
+        // Example usage of OpenAI API
         const completion = yield openai.chat.completions.create({
             messages: [
                 { role: "system", content: "You are a helpful assistant." },
@@ -36,10 +36,11 @@ function main() {
             ],
             model: "gpt-4o-mini",
         });
-        console.log(completion.choices[0]);
+        console.log(completion.choices[0].message.content);
     });
 }
 main();
-app.listen(process.env.PORT || 3104, () => {
-    console.log("$$$$$$$$/// STARTED THE SERVER ///$$$$$$$$");
+const PORT = process.env.PORT || 3104;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
