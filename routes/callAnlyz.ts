@@ -45,7 +45,8 @@ async function mp3ToTranscript(filePath: string): Promise<string> {
     });
 
     console.log('Transcript received:', transcript);
-    return transcript.text;
+    const transcriptText = JSON.stringify(transcript);
+    return transcriptText;
   } catch (error) {
     console.error('Error during transcription:', error);
     throw error;

@@ -45,7 +45,8 @@ function mp3ToTranscript(filePath) {
                 response_format: 'text',
             });
             console.log('Transcript received:', transcript);
-            return transcript.text;
+            const transcriptText = JSON.stringify(transcript);
+            return transcriptText;
         }
         catch (error) {
             console.error('Error during transcription:', error);
