@@ -91,18 +91,18 @@ async function analyzeCall(filePath: string, startPhrase: string, endPhrase: str
     custSentimentScore: '',
   };
   const transcript = await mp3ToTranscript(filePath);
-  const transcriptString = (transcript ?? '').toString();
+  const transcriptString = (transcript ?? '').toString().toLowerCase();
   const callStart = transcriptString.split(' ').slice(0, 30).join(' ');
   const callEnd = transcriptString.split(' ').slice(-30).join(' ');
 
-  if (callStart.includes(startPhrase)) {
+  if (callStart.includes(startPhrase.toLowerCase())) {
     console.log('The call start contains the phrase: ' + startPhrase);
     returnObj.startPhraseFound = true;
   } else {
     console.log('The call start does not have the phrase: ' + startPhrase);
   }
 
-  if (callEnd.includes(endPhrase)) {
+  if (callEnd.includes(endPhrase.toLowerCase())) {
     console.log('The call end contains the phrase: ' + endPhrase);
     returnObj.endPhraseFound = true;
   } else {
