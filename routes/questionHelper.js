@@ -15,10 +15,10 @@ const router = Router();
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
-function answerQuestion(articleTitle, articleBody, question) {
+function answerQuestion(articles, question) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const articleContent = `Title: ${articleTitle}\n\nBody: ${articleBody}`;
+        const articleContent = articles.map(article => `Title: ${article.title}\n\nBody: ${article.body}`).join('\n\n---\n\n');
         const completion = yield openai.chat.completions.create({
             messages: [
                 { role: 'system', content: "You are an assistant that answers questions based on provided articles. Your answers are no longer than two paragraphs." },
@@ -36,12 +36,12 @@ router.get('/', (req, res) => {
     res.send('This is the home page for question helper!');
 });
 router.post('/ask', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, body, question } = req.body;
-    if (!title || !body || !question) {
-        return res.status(400).json({ error: 'Title, body, and question are required' });
+    const { articles, question } = req.body;
+    if (!articles || articles.length === 0 || !question) {
+        return res.status(400).json({ error: 'Articles and question are required' });
     }
     try {
-        const answer = yield answerQuestion(title, body, question);
+        const answer = yield answerQuestion(articles, question);
         res.json({ answer });
     }
     catch (error) {

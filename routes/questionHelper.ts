@@ -10,8 +10,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-async function answerQuestion(articleTitle: string, articleBody: string, question: string): Promise<string> {
-  const articleContent = `Title: ${articleTitle}\n\nBody: ${articleBody}`;
+async function answerQuestion(articles: { title: string, body: string }[], question: string): Promise<string> {
+  const articleContent = articles.map(article => `Title: ${article.title}\n\nBody: ${article.body}`).join('\n\n---\n\n');
   
   const completion = await openai.chat.completions.create({
     messages: [
@@ -32,14 +32,14 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.post('/ask', async (req: Request, res: Response) => {
-  const { title, body, question } = req.body;
+  const { articles, question } = req.body;
 
-  if (!title || !body || !question) {
-    return res.status(400).json({ error: 'Title, body, and question are required' });
+  if (!articles || articles.length === 0 || !question) {
+    return res.status(400).json({ error: 'Articles and question are required' });
   }
 
   try {
-    const answer = await answerQuestion(title, body, question);
+    const answer = await answerQuestion(articles, question);
     res.json({ answer });
   } catch (error) {
     console.error('Error processing request:', error);
