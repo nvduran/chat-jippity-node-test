@@ -1,10 +1,10 @@
-import { Router } from "express";
-import OpenAI from "openai";
-import multer from "multer";
-import fs from "fs";
-import dotenv from "dotenv";
-import { Request, Response } from "express";
-import path from "path";
+import { Router } from 'express';
+import OpenAI from 'openai';
+import multer from 'multer';
+import fs from 'fs';
+import dotenv from 'dotenv';
+import { Request, Response } from 'express';
+import path from 'path';
 
 dotenv.config();
 
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
     cb(null, `${file.fieldname}-${Date.now()}${ext}`);
-  }
+  },
 });
 
 const upload = multer({ storage: storage });
@@ -34,7 +34,7 @@ async function mp3ToTranscript(filePath: string): Promise<string> {
   try {
     const normalizedPath = path.resolve(filePath);
     console.log(`Transcribing file at normalized path: ${normalizedPath}`);
-    
+
     const fileStream = fs.createReadStream(normalizedPath);
     console.log(`File stream created for file: ${normalizedPath}`);
 

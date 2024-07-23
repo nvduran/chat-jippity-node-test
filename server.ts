@@ -12,7 +12,11 @@ dotenv.config();
 const app = express();
 
 // CORS error fix
-app.use(cors());
+app.use(cors({
+  origin: 'http://192.168.1.109:5173',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+}));
 
 // Middleware to parse request body
 app.use(bodyParser.json());

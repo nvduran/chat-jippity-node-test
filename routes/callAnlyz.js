@@ -7,12 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Router } from "express";
-import OpenAI from "openai";
-import multer from "multer";
-import fs from "fs";
-import dotenv from "dotenv";
-import path from "path";
+import { Router } from 'express';
+import OpenAI from 'openai';
+import multer from 'multer';
+import fs from 'fs';
+import dotenv from 'dotenv';
+import path from 'path';
 dotenv.config();
 const router = Router();
 const storage = multer.diskStorage({
@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
         cb(null, `${file.fieldname}-${Date.now()}${ext}`);
-    }
+    },
 });
 const upload = multer({ storage: storage });
 const openai = new OpenAI({
