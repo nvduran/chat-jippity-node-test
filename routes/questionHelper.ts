@@ -15,7 +15,7 @@ async function answerQuestion(articleTitle: string, articleBody: string, questio
   
   const completion = await openai.chat.completions.create({
     messages: [
-      { role: 'system', content: "You are an assistant that answers questions based on provided articles." },
+      { role: 'system', content: "You are an assistant that answers questions based on provided articles. Your answers are no longer than two paragraphs." },
       { role: 'assistant', content: `The article content is as follows: ${articleContent}` },
       { role: 'user', content: `The question is: ${question}` },
     ],

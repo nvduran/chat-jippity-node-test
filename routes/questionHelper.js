@@ -21,7 +21,7 @@ function answerQuestion(articleTitle, articleBody, question) {
         const articleContent = `Title: ${articleTitle}\n\nBody: ${articleBody}`;
         const completion = yield openai.chat.completions.create({
             messages: [
-                { role: 'system', content: "You are an assistant that answers questions based on provided articles." },
+                { role: 'system', content: "You are an assistant that answers questions based on provided articles. Your answers are no longer than two paragraphs." },
                 { role: 'assistant', content: `The article content is as follows: ${articleContent}` },
                 { role: 'user', content: `The question is: ${question}` },
             ],
